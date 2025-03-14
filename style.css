@@ -1,0 +1,152 @@
+/* बेसिक स्टाइल */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('assets/background.jpg');
+    background-size: cover;
+    color: #333;
+}
+
+header, footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+}
+
+nav a {
+    color: #fff;
+    margin: 0 10px;
+    text-decoration: none;
+}
+
+.setup-screen {
+    margin: 15px auto;
+    text-align: center;
+}
+
+.setup-screen label,
+.setup-screen select,
+.setup-screen button {
+    font-size: 1em;
+    padding: 8px;
+    margin: 5px;
+}
+
+/* गेम कंटेनर */
+#gameContainer {
+    margin: 20px auto;
+    max-width: 500px;
+    display: grid;
+    grid-gap: 5px;
+}
+
+/* सेल स्टाइलिंग (3D एनिमेशन सहित) */
+.cell {
+    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+    font-size: 2em;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.3s, background-color 0.3s;
+    transform-style: preserve-3d;
+}
+
+.cell:hover {
+    background-color: #ddd;
+}
+
+.cell.flip {
+    transform: rotateY(180deg);
+}
+
+/* O और X को कलरफुल बनाएं */
+.cell[data-value="X"] {
+    color: #e74c3c;  /* लाल */
+}
+
+.cell[data-value="O"] {
+    color: #3498db;  /* नीला */
+}
+
+#statusMessage {
+    margin-top: 20px;
+    font-size: 1.5em;
+}
+
+/* लीडरबोर्ड स्टाइल */
+#leaderboardContainer {
+    margin-top: 30px;
+    text-align: left;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#leaderboardContainer h2 {
+    text-align: center;
+}
+
+#leaderboardList {
+    list-style: none;
+    padding: 0;
+}
+
+#leaderboardList li {
+    background: #eee;
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+/* AdSense बैनर स्टाइल */
+.ad-banner {
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    width: 300px;
+    height: 50px;
+    z-index: 1000;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Celebration Effect */
+.celebration {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #ffeb3b;
+    color: #333;
+    padding: 20px;
+    font-size: 2em;
+    border-radius: 10px;
+    z-index: 1000;
+    animation: fadeInOut 3s ease;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* मोबाइल रिस्पॉन्सिवनेस */
+@media (max-width: 600px) {
+    .cell {
+        font-size: 1.5em;
+        padding: 15px;
+    }
+    header, footer {
+        padding: 15px;
+    }
+    nav a {
+        margin: 0 5px;
+    }
+}
