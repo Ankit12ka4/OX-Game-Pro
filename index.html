@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- मोबाइल और रिस्पॉन्सिव डिज़ाइन -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="OX Game Pro - Play Advanced Tic Tac Toe with multiple modes: win with 3, 4, 5 or even God Level (7 in a row).">
+  <meta name="keywords" content="OX Game Pro, Tic Tac Toe, Advanced, 3 in a row, 4 in a row, 5 in a row, God Level, Leaderboard">
+  <meta name="author" content="Ankit Thakur">
+  <meta name="robots" content="index, follow">
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="OX Game Pro">
+  <meta property="og:description" content="Enjoy an advanced Tic Tac Toe game with 3D effects, multiple modes and a leaderboard.">
+  <meta property="og:image" content="assets/logo.png">
+  <meta property="og:url" content="https://yourwebsite.com">
+  <!-- Content Security Policy Example -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://pagead2.googlesyndication.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:;">
+  
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="assets/icon.png" type="image/x-icon">
+  <title>OX Game Pro - Play Online</title>
+  
+  <!-- गेम लॉजिक और AdSense स्क्रिप्ट -->
+  <script src="script.js" defer></script>
+  <script src="ads.js" defer></script>
+</head>
+<body>
+
+<header>
+  <h1>OX Game Pro</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="about.html">About Us</a>
+    <a href="terms.html">Terms &amp; Conditions</a>
+    <a href="contact.html">Contact Us</a>
+    <a href="tips.html">Tips &amp; Tricks</a>
+  </nav>
+  <!-- सेटअप स्क्रीन: गेम मोड सिलेक्शन -->
+  <div class="setup-screen">
+    <label for="modeSelect">Game Mode:</label>
+    <select id="modeSelect">
+      <option value="3">3 in a row (3×3)</option>
+      <option value="4">4 in a row (4×4)</option>
+      <option value="5">5 in a row (5×5)</option>
+      <option value="God">God Level (7×7, 7 in a row)</option>
+    </select>
+    <button id="startBtn">Start Game</button>
+  </div>
+</header>
+
+<main>
+  <div id="gameContainer"></div>
+  <div id="statusMessage"></div>
+  <button id="restartBtn" style="display:none;">Restart Game</button>
+  
+  <!-- लीडरबोर्ड सेक्शन -->
+  <section id="leaderboardContainer">
+    <h2>Leaderboard (God Level Wins)</h2>
+    <ul id="leaderboardList"></ul>
+  </section>
+</main>
+
+<footer>
+  <p>© 2025 OX Game Pro. All rights reserved. | Designed by Ankit Thakur</p>
+</footer>
+
+</body>
+</html>
