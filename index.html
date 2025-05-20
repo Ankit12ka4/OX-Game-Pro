@@ -1,95 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- SEO & Meta Tags -->
-  <meta name="description" content="OX AI Master - An advanced Tic Tac Toe game with multiple AI levels including God Mode. Play with stunning 3D board, golden themes and get featured on the permanent leaderboard!">
-  <meta name="keywords" content="OX AI Master, Tic Tac Toe, Advanced Game, God Mode, AI Levels, Leaderboard, 3D Game">
-  <meta name="author" content="Your Name or Studio">
-  <title>OX AI Master</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="manifest" href="manifest.json">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OX Game Pro</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Boogaloo&family=Days+One&family=Amaranth:wght@700&family=Autour+One&display=swap" rel="stylesheet">
+
+  <!-- ChunkFive Font -->
+  <link href="https://fonts.cdnfonts.com/css/chunkfive" rel="stylesheet">
+
+  <!-- CSS -->  <link rel="stylesheet" href="style 3.css" />
+
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Header Section: Title and Leaderboard -->
-  <header>
-    <h1>
-      <!-- हिंदी और इंग्लिश दोनों में संदेश -->
-      अगर कोई प्लेयर गॉड मोड में जीत जाता है, तो उसका नाम लीडरबोर्ड पर शो होगा!<br>
-      If a player wins in God Mode, their name will be displayed on the Leaderboard!
-    </h1>
-    <!-- Leaderboard Container (स्थायी डेटा – कभी डिलीट नहीं होगा) -->
-    <aside id="leaderboard">
-      <!-- लीडरबोर्ड एंट्रीज यहाँ रेंडर होंगी -->
-    </aside>
-  </header>
+  <div class="container">
 
-  <!-- Main Menu: Game Mode Options -->
-  <main id="menu">
-    <section id="game-modes">
-      <button class="mode-btn" data-mode="human-vs-ai">Human vs AI</button>
-      <button class="mode-btn" data-mode="ai-vs-ai">AI vs AI</button>
-      <button class="mode-btn" data-mode="human-vs-human">Human vs Human</button>
-    </section>
-  </main>
+    <!-- Header -->
+    <header>
+      <h1 class="text-3d-wrapper">
+        <span class="text-3d">OX Game Pro</span>
+      </h1>
+    </header>
 
-  <!-- Modal for AI Level Selection (केवल Human vs AI मोड में) -->
-  <div id="aiLevelModal" class="modal hidden">
-    <div class="modal-content">
-      <h2>Select AI Level</h2>
-      <button class="ai-level-btn" data-level="easy">Easy (Bolt AI)</button>
-      <button class="ai-level-btn" data-level="medium">Medium (Thinker AI)</button>
-      <button class="ai-level-btn" data-level="hard">Hard (Strategist AI)</button>
-      <button class="ai-level-btn" data-level="god">God Mode (God AI)</button>
-    </div>
+    <!-- Info Message -->
+    <p class="info">💥Your name will be registered after winning against God AI⤵️</p>
+
+    <!-- Main Section -->
+    <main class="main-section">
+
+      <!-- Left Section: Board size and Game Modes -->
+      <section class="left-section">
+
+        <!-- Board Size Options -->
+        <h2 class="board-title">Board Size</h2>
+        <div class="board-options" role="group">
+          <button class="board-size">3×3</button>
+          <button class="board-size">4×4</button>
+          <button class="board-size">5×5</button>
+        </div>
+
+        <!-- How to Play Section -->
+        <h2 class="how-to-play">How to Play</h2>
+        <div class="how-to">
+          <a href="level.html" style="text-decoration: none";>
+          <button class="play1">👤  VS  🤖</button></a>
+           <a href="game.html" style="text-decoration: none"> <button class="play2">👤  VS  👤</button></a>
+          <button class="play3">Online Play</button>
+        </div>
+
+      </section>
+
+      <!-- Right Section: Leaderboard -->
+      <aside class="winners-section" aria-label="GOD MODE Leaderboard">
+        <h2><span aria-hidden="true">🔥</span> GOD MODE Leaderboard <span aria-hidden="true">🏆</span></h2>
+        <ol class="winner-list">
+          <li style="color: green;">🏆Ankit Thakur</li>
+          <li>🏅Aman</li>
+          <li>🎖️</li>
+          <li>🌟</li>
+          <li>🌟</li>
+          <li>🌟</li>
+          <li>🌟</li>
+          <li>🌟</li>
+          <li>🌟</li>
+          <li>🌟</li>
+          <li>⭐</li>
+          <li>⭐</li>
+          <li>⭐</li>
+          <li>⭐</li>
+          <li>⭐</li>
+          <li>⭐</li>
+          <li>⭐</li>
+          <li>⭐</li>
+          <li>⭐</li>
+          <li>⭐</li>
+          <li>⭐</li>
+          <li>⭐</li>
+          <li>⭐</li>
+          <li>⭐</li>
+          <li>⭐</li>
+          <li>⭐</li>
+          <li>⭐</li>
+          <li>⭐</li>
+          <li>⭐</li>
+          <li>⭐</li>
+          <li>🌟</li>
+          <li>🌟</li>
+          <li>🌟</li>
+          <li>🌟</li>
+          <li>🌟</li>
+          <li>—</li>
+        </ol>
+      </aside>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <nav>
+        <a href="#">About Us</a>
+        <a href="#">Terms & Conditions</a>
+        <a href="#">Privacy</a>
+        <a href="#">Contact Us</a>
+      </nav>
+    </footer>
+
   </div>
 
-  <!-- Modal for Board Size Selection (सभी मोड्स में) -->
-  <div id="boardSizeModal" class="modal hidden">
-    <div class="modal-content">
-      <h2>Select Board Size</h2>
-      <button class="board-size-btn" data-size="3">3 x 3</button>
-      <button class="board-size-btn" data-size="4">4 x 4</button>
-      <button class="board-size-btn" data-size="5">5 x 5</button>
-      <button class="board-size-btn" data-size="7">7 x 7 (God Mode Exclusive)</button>
-    </div>
-  </div>
-
-  <!-- Game Board Container -->
-  <section id="gameBoard" class="hidden">
-    <!-- 3D Board will be dynamically rendered here via JavaScript -->
-  </section>
-
-  <!-- In-Game Controls: Back, Home, Vibration Toggle -->
-  <nav id="inGameControls" class="hidden">
-    <button id="backBtn">Back</button>
-    <button id="homeBtn">Home</button>
-    <button id="vibrationToggle">Vibration On/Off</button>
-  </nav>
-
-  <!-- Result Modal for Win/Lose/Draw & Leaderboard Name Entry (God Mode special) -->
-  <div id="resultModal" class="modal hidden">
-    <div class="modal-content">
-      <h2 id="resultMessage"></h2>
-      <!-- अगर God Mode में जीत होती है, तो ऑटोमैटिकली कीबोर्ड ओपन होकर नाम दर्ज करने का इनपुट आएगा -->
-      <input type="text" id="playerNameInput" placeholder="Enter your name..." class="hidden">
-      <button id="submitNameBtn" class="hidden">Submit</button>
-      <button id="playAgainBtn">Play Again</button>
-    </div>
-  </div>
-
-  <!-- Footer with Links to Additional Pages -->
-  <footer>
-    <nav>
-      <a href="about.html">About</a> |
-      <a href="tips.html">Tips & Tricks</a> |
-      <a href="terms.html">Terms & Conditions</a> |
-      <a href="contact.html">Contact</a>
-    </nav>
-  </footer>
-
-  <!-- Script Inclusion -->
+  <!-- JavaScript -->
   <script src="script.js"></script>
 </body>
   </html>
