@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OX Game Pro</title>
+
+  <!-- Fonts & Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Boogaloo&family=Days+One&family=Amaranth:wght@700&family=Autour+One&display=swap" rel="stylesheet">
+  <link href="https://fonts.cdnfonts.com/css/chunkfive" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style2.css" />
+
+  <style>
+    .backup-emoji { display: none; }
+    .emoji-name {
+      font-size: 12px;
+      text-align: center;
+      display: block;
+    }
+    .emoji.backup {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1 class="text-3d-wrapper">
+        <span class="text-3d">OX Game Pro</span>
+      </h1>
+    </header>
+
+    <div class="menu-bar">
+      <button class="home-btn">Home</button>
+      <button class="new-btn">New</button>
+      <button class="undo-btn">
+        <span class="emoji primary">⏳↩️</span><span class="emoji backup">↩️</span>
+      </button>
+      <button class="hint-btn">
+        <span class="emoji primary">💡</span><span class="emoji backup">❓</span>
+      </button>
+      <button class="btn-menu">
+        <span class="emoji primary">☰</span><span class="emoji backup">≡</span>
+      </button>
+    </div>
+
+     <div class="score-bar">
+      <div class="ai-section">
+        <span class="ai-emoji" onclick="toggleAIOptions()"> <span class="emoji-name">AI</span>
+          <span class="emoji primary">🤖</span><span class="emoji backup">💻</span>
+          
+        </span>
+        <div class="ai-options hidden">
+          <span onclick="setAILevel('🤖','Easy')">  
+            <span class="emoji primary">🤖</span><span class="emoji backup">💻</span><span class="emoji-name">Easy</span>
+            
+          </span>
+          <span onclick="setAILevel('🔰', 'Medium')">   <span class="emoji primary">🔰</span><span class="emoji backup">💡</span><span class="emoji-name">Medium</span>
+           
+            
+          </span>
+          <span onclick="setAILevel('⚙️', 'Hard')"> 
+            <span class="emoji primary">⚙️</span><span class="emoji backup">⛭</span><span class="emoji-name">Hard</span>
+            
+          </span>
+          <span onclick="setAILevel('👽', 'God')"> 
+            <span class="emoji primary">👽</span><span class="emoji backup">★</span><span class="emoji-name">God ai</span>
+            
+          </span>
+        </div>
+        <span class="ai-score">0</span>
+      </div>
+
+      <div class="human-section"><span class="human-score">0</span>
+     
+        <span class="human-emoji" onclick="toggleHumanOptions()"> 
+          <span class="emoji primary">👦</span><span class="emoji backup">👤</span><span class="emoji-name">Human</span>
+          
+        </span>
+        <div class="human-options hidden">
+          <span onclick="setHumanEmoji('👦','�','Boy')">
+           <span class="emoji primary">👦</span><span class="emoji backup">🙂</span>  <span class="emoji-name">Boy</span>
+            
+          </span>
+          <span onclick="setHumanEmoji('👧','�','Girl')">
+              <span class="emoji primary">👧</span><span class="emoji backup">🙃</span><span class="emoji-name">Girl</span>
+            
+          </span>
+          <span onclick="setHumanEmoji('🧔','�','Man')">
+             <span class="emoji primary">🧔</span><span class="emoji backup">👨</span><span class="emoji-name">Man</span>
+            
+          </span>
+          <span onclick="setHumanEmoji('👩','�','Woman')">
+             <span class="emoji primary">👩</span><span class="emoji backup">👩</span><span class="emoji-name">Woman</span>
+        
+            
+          </span>
+        </div>
+         </div>
+    </div>
+    
+
+
+    <div class="game-board"></div>
+
+    <div class="bottom-bar">
+      <div class="turn-indicator game-result">Your Turn</div>
+      <div class="action-buttons">
+        <button class="btn-play" style="display: none;" onclick="resetGameBoardOnly()">Play Again</button>
+        <button class="btn-try" style="display: none;" onclick="resetGameBoardOnly()">Try Again</button>
+      </div>
+    </div>
+
+
+    <div class="ad-space"></div>
+  </div>
+
+  <!-- External JavaScript Files -->
+  <script src="script.js" defer></script>
+  <script src="script21.js" defer>
+  
+
+</body>
+</html>
