@@ -10,7 +10,89 @@ const humanScoreSpan = document.querySelector('.human-score');
 const aiOptions = document.querySelector('.ai-options');
 const humanOptions = document.querySelector('.human-options');
 const aiEmoji = document.querySelector('.ai-emoji');
-const humanEmoji = document.querySelector('.human-emoji');
+const humanEmoji = document.querySelector('.human-emoji'); 
+
+// =================== New Game Button Logic ===================
+newBtn.addEventListener('click', () => {
+  winCount = 0;
+  lossCount = 0;
+  updateScoreboard();
+  localStorage.removeItem('selectedBoardSize');
+  localStorage.removeItem('gameLevel');
+  applySavedAILevel(); // यह लाइन AI emoji व level update के लिए है
+  initGame();
+});
+
+
+// Ensure DOM is loaded before attaching listeners
+window.addEventListener('DOMContentLoaded', () => {
+  const hintBtn = document.getElementById('hint-btn');
+  hintBtn.addEventListener('click', showHint);
+
+
+
+  function showHint() {
+    if (gameOver) return;
+
+    if (!['Easy', 'Medium', 'Hard'].includes(gameLevel)) {
+      statusMessage.textContent = "Hint is not available at this level.";
+      return;
+    }
+
+    const emptyCells = board
+      .map((val, idx) => val === null ? idx : null)
+      .filter(idx => idx !== null);
+
+    if (emptyCells.length === 0) return;
+
+    for (let idx of emptyCells) {
+      board[idx] = 'X';
+      if (checkWin(board, 'X')) {
+        board[idx] = null;
+        highlightHintCell(idx);
+        statusMessage.textContent = "Opponent could win here! Block it!";
+        return;
+      }
+      board[idx] = null;
+    }
+
+    for (let idx of emptyCells) {
+      board[idx] = 'O';
+      if (checkWin(board, 'O')) {
+        board[idx] = null;
+        highlightHintCell(idx);
+        statusMessage.textContent = "Try this move to win!";
+        return;
+      }
+      board[idx] = null;
+    }
+
+    const randomHintIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+    highlightHintCell(randomHintIndex);
+    statusMessage.textContent = "Here's a hint!";
+  }
+
+  function highlightHintCell(index) {
+    document.querySelectorAll('.cell').forEach(cell => {
+      cell.classList.remove('hint-highlight');
+    });
+
+    const hintCell = document.querySelector(`.cell[data-index='${index}']`);
+    if (hintCell) {
+      hintCell.classList.add('hint-highlight');
+
+      // Remove highlight after 3 seconds
+      setTimeout(() => {
+        hintCell.classList.remove('hint-highlight');
+      }, 3000);
+    }
+  }
+});
+
+
+//AI thinking ke liye variable
+let aiThinkingInterval = null;
+let currentThinkingIndex = 0;
 
 // ================= Emoji Fallback on Window Load ===================
 window.onload = function () {
@@ -51,6 +133,8 @@ function setHumanEmoji(primaryEmoji, backupEmoji, name) {
   }
   humanOptions.classList.add('hidden');
 }
+
+
 
 // =================== Set AI Level and Save to localStorage ==========
 function setAILevel(emoji, level) {
@@ -121,7 +205,12 @@ let gameOver = false;
 let winCount = 0;
 let lossCount = 0;
 
+let thinkingCells = [];
+let moveHistory = [];
+let lastPlayerMoveIndex = null;
+let lastAIMoveIndex = null;
 
+let isGameOver = false;
 // =================== Game Initialization ===========================
 function createBoard(size, withClick = false) {
   board = Array(size * size).fill(null);
@@ -152,17 +241,25 @@ function initGame() {
   currentPlayer = 'X';
   gameOver = false;
   statusMessage.textContent = 'Your Turn';
-
+removeWinLine();
   createBoard(boardSize, true);
+  moveHistory = [];
+  lastPlayerMoveIndex = null;
+  lastAIMoveIndex = null;
 
   playAgainBtn.style.display = 'none';
   tryAgainBtn.style.display = 'none';
+  updateScoreboard();
 }
 
+
 // ==================== Game Flow ===========================
-createBoard(boardSize); // Initial board render
+createBoard(boardSize, true); // Initial board render
 
 function handleCellClick(e) {
+  document.querySelectorAll('.cell').forEach(cell => {
+  cell.classList.remove('hint-highlight');
+});
   vibrateDevice();
   const index = e.target.getAttribute('data-index');
   if (gameOver || board[index]) return;
@@ -171,19 +268,76 @@ function handleCellClick(e) {
 
   if (!gameOver) {
     statusMessage.textContent = 'AI is thinking...';
-    setTimeout(() => aiMove(), 300);
+    startAIThinkingAnimation();
+
+    setTimeout(() => {
+      stopAIThinkingAnimation();
+      aiMove();
+    }, 300);
   }
 }
 
+
+function setFontSizeBasedOnCell(cell) {
+  const height = cell.clientHeight;
+  // font-size को cell height का 70% रखो
+  cell.style.fontSize = (height * 0.7) + 'px';
+}
+
+// ==================== Make Move Function ===================
 function makeMove(index, player) {
   if (!board[index]) {
     board[index] = player;
+
     const cell = gameBoard.querySelector(`[data-index='${index}']`);
     cell.textContent = player;
 
+    // यहाँ dynamic font size सेट कर रहे हैं
+    setFontSizeBasedOnCell(cell);
+
+    // X और O के लिए रंगीन क्लास जोड़ना
+    if (player === 'X') {
+      cell.classList.add('x');
+      cell.classList.remove('o');
+    } else {
+      cell.classList.add('o');
+      cell.classList.remove('x');
+    }
+
+    if (player === 'O') {
+      // AI move पर vibrate animation
+      cell.classList.add('ai-move-vibrate');
+      setTimeout(() => {
+        cell.classList.remove('ai-move-vibrate');
+      }, 300);
+    }
+
+    // Move history में जोड़ो
+    moveHistory.push({ index, player });
+
+    // Track last move
+    if (player === 'X') {
+      lastPlayerMoveIndex = index;
+    } else {
+      lastAIMoveIndex = index;
+    }
+
+    // Highlight last move
+    highlightLastMove(player === 'X' ? 'player' : 'ai');
+
+    // Check for Win
     if (checkWin(board, player)) {
       gameOver = true;
+
+      const winningLine = getWinningLine(board, player);
+      drawWinLine(winningLine);
       highlightWin(player);
+
+      // आखिरी move highlights हटा दो
+      lastPlayerMoveIndex = null;
+      lastAIMoveIndex = null;
+      highlightLastMove();
+
       if (player === 'X') {
         winCount++;
         statusMessage.textContent = 'You win!';
@@ -193,21 +347,180 @@ function makeMove(index, player) {
         statusMessage.textContent = 'AI wins!';
         tryAgainBtn.style.display = 'block';
       }
+
       updateScoreboard();
-    } else if (board.every(cell => cell !== null)) {
+    }
+
+    // Check for Draw
+    else if (board.every(cell => cell !== null)) {
       gameOver = true;
       statusMessage.textContent = 'Draw!';
       playAgainBtn.style.display = 'block';
-    } else {
+
+      // Highlights reset करो
+      lastPlayerMoveIndex = null;
+      lastAIMoveIndex = null;
+      highlightLastMove();
+    }
+
+    // Switch turn
+    else {
       currentPlayer = (player === 'X') ? 'O' : 'X';
       statusMessage.textContent = (currentPlayer === 'X') ? 'Your Turn' : 'AI is thinking...';
     }
   }
 }
 
+// ==================== Highlight Last Move ===================
+function highlightLastMove(byWhom) {
+  document.querySelectorAll('.cell').forEach(cell => {
+    cell.classList.remove('last-move-player', 'last-move-ai');
+  });
+
+  if (byWhom === 'player' && lastPlayerMoveIndex !== null) {
+    const cell = document.querySelector(`.cell[data-index='${lastPlayerMoveIndex}']`);
+    if (cell) cell.classList.add('last-move-player');
+  } else if (byWhom === 'ai' && lastAIMoveIndex !== null) {
+    const cell = document.querySelector(`.cell[data-index='${lastAIMoveIndex}']`);
+    if (cell) cell.classList.add('last-move-ai');
+  }
+}
+
+
+
+// ==================== AI Thinking Animation ===================
+function startAIThinkingAnimation() {
+  const emptyCells = Array.from(document.querySelectorAll('.cell'))
+    .filter((cell, index) => !board[index]);
+
+  currentThinkingIndex = 0;
+
+  aiThinkingInterval = setInterval(() => {
+    emptyCells.forEach(cell => cell.classList.remove('thinking-highlight'));
+
+    if (emptyCells.length === 0) {
+      clearInterval(aiThinkingInterval);
+      return;
+    }
+
+    const currentCell = emptyCells[currentThinkingIndex];
+    currentCell.classList.add('thinking-highlight');
+
+    currentThinkingIndex = (currentThinkingIndex + 5) % emptyCells.length;
+  }, 100);
+}
+
+function stopAIThinkingAnimation() {
+  clearInterval(aiThinkingInterval);
+  aiThinkingInterval = null;
+
+  document.querySelectorAll('.cell').forEach(cell => {
+    cell.classList.remove('thinking-highlight');
+  });
+}
+function updateBoard() {
+  document.querySelectorAll('.cell').forEach((cell, index) => {
+    cell.textContent = board[index] || '';
+  });
+}
+// बटन को पहचानें
+const undoBtn = document.getElementById('undo-btn');
+
+// Undo फंक्शन जोड़ें (पहले से भेजा था)
+function undoMove() {
+  if (moveHistory.length < 2 || gameOver) return;
+
+  // दो बार undo (player और AI)
+  for (let i = 0; i < 2; i++) {
+    const lastMove = moveHistory.pop();
+    if (lastMove) {
+      board[lastMove.index] = null;  // <-- यहां '' की जगह null करो
+      const cell = document.querySelector(`[data-index='${lastMove.index}']`);
+      if (cell) cell.textContent = '';
+    }
+  }
+
+  gameOver = false;
+  statusMessage.textContent = 'Your Turn';
+  currentPlayer = 'X';
+
+  // अंतिम move index अपडेट करो
+  lastPlayerMoveIndex = null;
+  lastAIMoveIndex = null;
+  highlightLastMove();
+
+  updateBoard();
+}
+// बटन पर क्लिक से Undo फंक्शन चलाओ
+undoBtn.addEventListener('click', undoMove);
+
 function checkWin(board, player) {
   const winLines = generateWinLines(boardSize);
   return winLines.some(line => line.every(i => board[i] === player));
+}
+
+function getWinningLine(board, player) {
+  const winLines = generateWinLines(boardSize);
+  return winLines.find(line => line.every(i => board[i] === player)) || null;
+}
+
+function removeWinLine() {
+  const line = document.querySelector('.win-line');
+  if (line) {
+    line.style.display = 'none';
+    line.style.width = '0px';
+  }
+}
+
+function drawWinLine(winLine) {
+  if (!winLine || winLine.length < 2) return;
+
+  const firstCell = gameBoard.querySelector(`[data-index='${winLine[0]}']`);
+  const lastCell = gameBoard.querySelector(`[data-index='${winLine[winLine.length - 1]}']`);
+  if (!firstCell || !lastCell) return;
+
+  const wrapper = document.querySelector('.game-wrapper');
+  const wrapperRect = wrapper.getBoundingClientRect();
+
+  const firstRect = firstCell.getBoundingClientRect();
+  const lastRect = lastCell.getBoundingClientRect();
+
+  const x1 = firstRect.left + firstRect.width / 2 - wrapperRect.left;
+  const y1 = firstRect.top + firstRect.height / 2 - wrapperRect.top;
+  const x2 = lastRect.left + lastRect.width / 2 - wrapperRect.left;
+  const y2 = lastRect.top + lastRect.height / 2 - wrapperRect.top;
+
+  const originalLength = Math.hypot(x2 - x1, y2 - y1);
+  const dx = (x2 - x1) / originalLength;
+  const dy = (y2 - y1) / originalLength;
+
+  const totalIncreasePercent = 0.24;
+  const increaseFactor = totalIncreasePercent / 2;
+
+  const newX1 = x1 - dx * originalLength * increaseFactor;
+  const newY1 = y1 - dy * originalLength * increaseFactor;
+  const newLength = originalLength * (1 + totalIncreasePercent);
+  const angle = Math.atan2(y2 - y1, x2 - x1) * (180 / Math.PI);
+
+  const line = document.querySelector('.win-line');
+
+  // Reset previous classes
+  line.classList.remove('win-line-player', 'win-line-ai');
+
+  // Add color class based on player
+  const winner = currentPlayer === 'X' ? 'player' : 'ai';
+  line.classList.add(winner === 'player' ? 'win-line-player' : 'win-line-ai');
+
+  line.style.display = 'block';
+  line.style.width = '0px'; // for animation
+  line.style.left = `${newX1}px`;
+  line.style.top = `${newY1}px`;
+  line.style.transformOrigin = 'left center';
+  line.style.transform = `rotate(${angle}deg)`;
+
+  setTimeout(() => {
+    line.style.width = `${newLength}px`;
+  }, 10);
 }
 
 function highlightWin(player) {
@@ -222,17 +535,46 @@ function highlightWin(player) {
   });
 }
 
+//reset gameboard only
+function resetGameBoardOnly() {
+  // सिर्फ board खाली करना है
+ 
+  board = Array(boardSize * boardSize).fill(null);
+  gameOver = false;
+  currentPlayer = 'X';
+
+  // सभी सेल खाली करो और क्लास हटाओ
+  document.querySelectorAll('.cell').forEach(cell => {
+    cell.textContent = '';
+    cell.classList.remove('win-player', 'win-ai');
+  });
+
+  // स्टेटस मैसेज रिसेट
+  statusMessage.textContent = 'Your Turn';
+
+  // बटन छुपाओ
+  playAgainBtn.style.display = 'none';
+  tryAgainBtn.style.display = 'none';
+
+  // जीत की लाइन हटाओ
+  const line = document.querySelector('.win-line');
+  if (line) {
+    line.style.display = 'none';
+    line.style.width = '0px';
+  }
+}
+
 function aiMove() {
   let index;
   try {
     if (gameLevel === 'Easy') {
-      index = randomMove();
+      index = hybridPlannedLossMove();
     } else if (gameLevel === 'Medium') {
-      index = (Math.random() < 0.5) ? randomMove() : bestMove();
+      index = (Math.random() < 0.5) ? hybridPlannedLossMove() : randomMove('Medium');
     } else if (gameLevel === 'Hard') {
-      index = (Math.random() < 0.8) ? bestMove() : randomMove();
+      index = (Math.random() < 0.8) ? bestMove() : randomMove('Hard');
     } else if (gameLevel === 'God') {
-      index = (Math.random() < 0.95) ? bestMove() : randomMove();
+      index = (Math.random() < 0.97) ? bestMove() : randomMove('God');
     }
 
     if (index !== null) {
@@ -243,9 +585,133 @@ function aiMove() {
   }
 }
 
-function randomMove() {
+function hybridPlannedLossMove() {
   const available = board.map((v, i) => v === null ? i : null).filter(i => i !== null);
-  return available.length ? available[Math.floor(Math.random() * available.length)] : null;
+  if (!available.length) return null;
+
+  const moveCount = board.filter(cell => cell !== null).length;
+
+  // Step 1: Early randomness
+  if (moveCount <= 2 && Math.random() < 0.5) {
+    return getRandomItem(available);
+  }
+
+  // Step 2: Try to allow player to win in future (simulate)
+  const potentialMoves = [];
+
+  for (let move of shuffleArray(available)) {
+    board[move] = 'O';
+    const chances = countPlayerWinningChances('X', 2);
+    board[move] = null;
+
+    if (chances >= 1) {
+      potentialMoves.push(move);
+    }
+  }
+
+  if (potentialMoves.length) {
+    return getRandomItem(potentialMoves);
+  }
+
+  // Step 3: If no good planned-losing move, return random
+  return getRandomItem(available);
+}
+
+function countPlayerWinningChances(player, depthLimit) {
+  let count = 0;
+
+  function simulate(tempBoard, depth) {
+    if (depth >= depthLimit) return;
+
+    for (let i = 0; i < tempBoard.length; i++) {
+      if (tempBoard[i] === null) {
+        tempBoard[i] = player;
+        if (checkWin(tempBoard, player)) {
+          count++;
+        } else {
+          simulate(tempBoard, depth + 1);
+        }
+        tempBoard[i] = null;
+      }
+    }
+  }
+
+  simulate([...board], 0);
+  return count;
+}
+
+function randomMove(level) {
+  const available = board.map((v, i) => v === null ? i : null).filter(i => i !== null);
+  if (!available.length) return null;
+
+  // 10% chance Easy mode helps the player win
+  if (level === 'Easy' && Math.random() < 0.10) {
+    return getHelpingMove('X') || getRandomItem(available);
+  }
+
+  // 5% chance Medium mode helps the player win
+  if (level === 'Medium' && Math.random() < 0.05) {
+    return getHelpingMove('X') || getRandomItem(available);
+  }
+
+  const player = 'X';
+  const ai = 'O';
+
+  // Blocking thresholds
+  const blockChances = {
+    'Easy': 0.20,
+    'Medium': 0.35,
+    'Hard': 0.50,
+    'God': 0.95
+  };
+
+  // Try to block player win
+  if (Math.random() < blockChances[level]) {
+    const blockMove = getBlockingMove(player);
+    if (blockMove !== null) return blockMove;
+  }
+
+  // Default random move
+  return getRandomItem(available);
+}
+function getBlockingMove(player) {
+  const available = board.map((v, i) => v === null ? i : null).filter(i => i !== null);
+  for (let i of available) {
+    board[i] = player;
+    if (checkWin(board, player)) {
+      board[i] = null;
+      return i;
+    }
+    board[i] = null;
+  }
+
+  // Check for double threat (fork) – block one
+  let doubleThreats = [];
+  for (let i of available) {
+    board[i] = player;
+    const chances = countPlayerWinningChances(player, 2);
+    board[i] = null;
+    if (chances >= 2) doubleThreats.push(i);
+  }
+
+  if (doubleThreats.length) return doubleThreats[0];
+  return null;
+}
+function getHelpingMove(player) {
+  const available = board.map((v, i) => v === null ? i : null).filter(i => i !== null);
+  for (let i of available) {
+    board[i] = player;
+    if (checkWin(board, player)) {
+      board[i] = null;
+      return i;
+    }
+    board[i] = null;
+  }
+  return null;
+}
+
+function getRandomItem(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
 }
 
 function bestMove() {
@@ -266,6 +732,34 @@ function bestMove() {
   });
   return move;
 }
+
+// hint दिखाने वाला function
+function showHint() {
+  if (gameOver || currentPlayer !== 'X') return;  // गेम ख़त्म या AI की बारी हो तो hint नहीं दिखाना
+  if (!['Easy', 'Medium', 'Hard'].includes(gameLevel)) return;  // सिर्फ Easy, Medium, Hard के लिए hint
+
+  clearHintHighlight();
+
+  // सबसे पहले मददगार move (win करने वाला), फिर blocking move, फिर bestMove
+  let hintIndex = getHelpingMove('X') || getBlockingMove('X') || bestMove();
+
+  if (hintIndex !== null) {
+    const cell = gameBoard.querySelector(`[data-index='${hintIndex}']`);
+    cell.classList.add('hint-highlight');
+  }
+}
+
+
+// hint highlight हटाने वाला function
+function clearHintHighlight() {
+  document.querySelectorAll('.hint-highlight').forEach(cell => {
+    cell.classList.remove('hint-highlight');
+  });
+}
+
+
+
+
 
 function minimax(newBoard, depth, isMaximizing, depthLimit) {
   if (checkWin(newBoard, 'O')) return 10 - depth;
@@ -291,16 +785,8 @@ function minimax(newBoard, depth, isMaximizing, depthLimit) {
 function getDepthLimit() {
   if (boardSize === 3) {
     switch (gameLevel) {
-      case 'Easy': return 2;
-      case 'Medium': return 3;
-      case 'Hard': return 5;
-      case 'God': return 7; // full depth
-      default: return 5;
-    }
-  } else if (boardSize === 4) {
-    switch (gameLevel) {
-      case 'Easy': return 2;
-      case 'Medium': return 3;
+      case 'Easy': return 1;
+      case 'Medium': return 2;
       case 'Hard': return 4;
       case 'God': return 6;
       default: return 4;
@@ -310,49 +796,90 @@ function getDepthLimit() {
       case 'Easy': return 1;
       case 'Medium': return 2;
       case 'Hard': return 3;
-      case 'God': return 4;
+      case 'God': return 5;
       default: return 3;
     }
+  } else if (boardSize === 7) {
+    switch (gameLevel) {
+      case 'Easy': return 1;
+      case 'Medium': return 2;
+      case 'Hard': return 2;
+      case 'God': return 3;
+      default: return 2;
+    }
   } else {
-    return 3; // default fallback
+    return 3;
   }
 }
 
+// Utility functions
+function getRandomItem(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function shuffleArray(array) {
+  let shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+function getRequiredToWin(size) {
+  if (size === 3) return 3;
+  if (size === 5) return 4;
+  if (size === 7) return 5;
+  return 3; // default fallback
+}
 // Generate winning combinations dynamically
 function generateWinLines(size) {
   const lines = [];
+  const winLength = size === 3 ? 3 : size === 5 ? 4 : 5;
 
   // Rows
   for (let r = 0; r < size; r++) {
-    const row = [];
-    for (let c = 0; c < size; c++) {
-      row.push(r * size + c);
+    for (let c = 0; c <= size - winLength; c++) {
+      const row = [];
+      for (let k = 0; k < winLength; k++) {
+        row.push(r * size + (c + k));
+      }
+      lines.push(row);
     }
-    lines.push(row);
   }
 
   // Columns
   for (let c = 0; c < size; c++) {
-    const col = [];
-    for (let r = 0; r < size; r++) {
-      col.push(r * size + c);
+    for (let r = 0; r <= size - winLength; r++) {
+      const col = [];
+      for (let k = 0; k < winLength; k++) {
+        col.push((r + k) * size + c);
+      }
+      lines.push(col);
     }
-    lines.push(col);
   }
 
   // Diagonal \
-  const diag1 = [];
-  for (let i = 0; i < size; i++) {
-    diag1.push(i * size + i);
+  for (let r = 0; r <= size - winLength; r++) {
+    for (let c = 0; c <= size - winLength; c++) {
+      const diag = [];
+      for (let k = 0; k < winLength; k++) {
+        diag.push((r + k) * size + (c + k));
+      }
+      lines.push(diag);
+    }
   }
-  lines.push(diag1);
 
   // Diagonal /
-  const diag2 = [];
-  for (let i = 0; i < size; i++) {
-    diag2.push((i + 1) * (size - 1));
+  for (let r = 0; r <= size - winLength; r++) {
+    for (let c = winLength - 1; c < size; c++) {
+      const diag = [];
+      for (let k = 0; k < winLength; k++) {
+        diag.push((r + k) * size + (c - k));
+      }
+      lines.push(diag);
+    }
   }
-  lines.push(diag2);
 
   return lines;
 }
@@ -363,3 +890,4 @@ tryAgainBtn.addEventListener('click', () => { vibrateDevice(); initGame(); });
 
 // Start the game
 initGame();
+    
