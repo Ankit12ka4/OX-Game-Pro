@@ -11,293 +11,19 @@
   <link href="https://fonts.googleapis.com/css2?family=Boogaloo&family=Days+One&family=Amaranth:wght@700&family=Autour+One&display=swap" rel="stylesheet">
   <link href="https://fonts.cdnfonts.com/css/chunkfive" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
-  
+  <link rel="stylesheet" href="style2.css" />
 
   <style>
-    .backup-emoji { display: none; }
-    .emoji-name {
-      font-size: 12px;
-      text-align: center;
-      display: block;
-    }
-    .emoji.backup {
-      display: none;
-    }
-    .score-bar {
-  display: flex;
-  justify-content: space-evenly;overflow:visible;
-  align-items: center;
-  border-radius: 1vw;
-  position: relative;
-  top: -2vh; background-color:#FF0934;
+  .emoji.primary {
+  display: inline-block;
 }
 
-.ai-section {
-  overflow:visible;
-  position: relative;
-  height: 7vh;
-  right: 0vw;
-      top: 0vh;
-  padding:2vw;
-  text-align: center;
-  font-size: 8vw !important;
-  background-color: #00FF38CF;
-  box-sizing:border-box;
-  align-items: center;
-  justify-content: center;
-}
-.human-section {
-  overflow:visible;
-  position: relative;
-  right: 0vw;
-  padding: 0 2vw;
-  height: 7vh;
-      top: 0vh;
-  padding:2vw;
-  text-align: center;
-  font-size: 8vw !important;
-  display: flex;
-  background-color: #00FF38CF;
-  box-sizing:border-box;
-  align-items: center;
-  justify-content: center;
-}
-
-.ai-section, .human-section{
-  display:flex;
-  background-color: #00FF38CF;
-  box-sizing:border-box;
-  
-  
-} 
-
-
-.ai-emoji, .human-emoji {
-  font-size: 10vw;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0vw;
-}
-
-.emoji-name, .emoji-name1 {
-  font-size: 2vw;
-  font-weight: bold;
-  color: #000;
-  text-align: center;
-  display: block;
-}
-
-.ai-options, .human-options {
-  position: absolute;
-  background: #FFFFFF;
-  border: 0.5vw solid #aaa;
-  border-radius: 4vw;
-  padding: 0vw;
-  z-index: 4;
-}
-
-.ai-options {
-  top: 8vh;
-  left: 40%;
-  transform: translateX(-50%);
-}
-
-.human-options {
-  top: 8vh;
-  left: 40%;
-  transform: translateX(-40%);
-}
-
-.ai-options span,
-.human-options span {
-  cursor: pointer;
-  font-size: 5vw;
-  padding: 1vw;
-  transition: transform 0.2s;
-}
-
-.ai-options span:hover,
-.human-options span:hover {
-  transform: scale(1.2);
-}
-
-.hidden {
+.emoji.backup {
   display: none;
+  pointer-events: none;
+  user-select: none;
 }
-
-.menu-bar {
-  position: relative;
-  top: -4vh;
-  width: 95.5vw;
-  height: 8vh;
-  display: flex;
-  background-color: #FF9999;
-  justify-content: space-evenly;
-  align-items: center;
-}
-
-.menu-bar button {
-  font-family: 'Amaranth', Arial, sans-serif;
-  height: 7.3vh;
-  border-radius: 1.5vw;
-  font-size: 8.5vw;
-  background-color: #FFF900;
-  color: #03FF56;
-  padding: 0.2vw;
-  font-weight: 900;
-  -webkit-text-stroke: 0.3vw #B003FF;
-}
-
-.ai-score, .human-score {
-  position: relative;
-  color: #F400FF;
-}
-
-.game-board {
-  display: grid;
-  gap: 2vw;
-  width: 60vw;
-  height: 60vw;
-  margin: auto;
-  justify-content: center;
-  
-}
-
-
-.game-board .cell {
-  width: 100%;
-  height: 100%;
-  background-color: lightgrey;
-  border: 0.5vw solid #000;
-  font-size: 7vw;
-  position: relative;
-  top: vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-.winning-cell {
-  border: 3px solid red;
-  background-color: rgba(255, 0, 0, 0.3);
-  animation: blink 0.5s linear infinite;
-}
-
-@keyframes blink {
-  0%, 100% { background-color: rgba(255, 0, 0, 0.3); }
-  50% { background-color: rgba(255, 0, 0, 0.6); }
-}
-
-/* Turn and Result */
-.status-area {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin: 10px 5vw;
-  margin-top:6vw;
-}
-
-.game-result {
-  font-size: clamp(1rem, 2.5vw, 1.5rem);
-  font-weight: bold;
-  color: #4CAF50;
-  margin-top: 1vw;
-  text-align: center;
-}
-
-.game-result {
-  color: #FF5722;
-  cursor: pointer;
-}
-.game-result 
-.game-result:hover {
-  text-decoration: underline;
-}
-
-/* Result Buttons */
-.result-buttons {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-
-}
-
-.btn-play,
-.btn-try {
-  background-color: #0076E7;
-  position: relative;
-  top:1.2vw;
-  color: white;
-  border: none;
-  border-radius: 12px;
-  font-size: 5vw;
-  cursor: pointer;
-  height:7.5vw;
-  width: 30vw;
-  transition: background-color 0.3s ease;
-}
-
-.btn-play:hover,
-.btn-try:hover {
-  background-color: #45a049;
-}
-
-
-.bottom-bar{display: flex;
-justify-content: space-between; /* ya flex-start / center / flex-end */
-align-items: center;
-  margin-top:8vh;
-}
-
-.cell {
-  aspect-ratio: 1;
-  font-size: 2rem;
-  text-align: center;
-  line-height: 1;
-  background: #eee;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-}
- 
-
-cell-X {
-  color: blue;
-}
-
-cell-O {
-  color: red;
-}
-
-.win-player {
-  background-color: lightgreen;
-}
-
-.win-ai {
-  background-color: lightcoral;
-}
-:root {
-  --mark-size: 4vw;
-}
-.cell {
-  font-size: var(--mark-size);
-  }
-
-    .last-move-player {
-  background-color: rgba(0, 200, 0, 0.3) !important;
-  border: 0.3vw solid green !important;
-}
-
-.last-move-ai {
-  background-color: rgba(200, 0, 0, 0.3) !important;
-  border: 0.3vw solid red !important;
-                               }
-  
-  </style>
+</style>
 </head>
 
 <body>
@@ -307,20 +33,37 @@ cell-O {
         <span class="text-3d">OX Game Pro</span>
       </h1>
     </header>
-
-    <div class="menu-bar">
-      <button class="home-btn">Home</button>
-      <button class="new-btn">New</button>
+<div class="menu-bar">
+  <a href="index.html"
+<button class="home-btn" aria-label="Home">
+  <span class="emoji primary" role="img" aria-label="Home Emoji">🏠</span>
+  <span class="emoji backup" aria-hidden="true">
+    <!-- SVG as fallback -->
+    <svg width="30" height="25" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <rect x="12" y="28" width="40" height="28" fill="#FFF3E0" stroke="#BDBDBD" stroke-width="1"/>
+      <polygon points="32,4 4,28 8,32 32,12 56,32 60,28" fill="#D32F2F"/>
+      <rect x="26" y="38" width="12" height="18" fill="#A1887F" stroke="#5D4037" stroke-width="1"/>
+      <circle cx="36" cy="47" r="1" fill="#000"/>
+      <rect x="40" y="34" width="10" height="10" fill="#81D4FA" stroke="#0288D1" stroke-width="1"/>
+      <line x1="45" y1="34" x2="45" y2="44" stroke="#0288D1" stroke-width="1"/>
+      <line x1="40" y1="39" x2="50" y2="39" stroke="#0288D1" stroke-width="1"/>
+      <rect x="44" y="10" width="4" height="8" fill="#B71C1C"/>
+    </svg>
+  </span>
+</button>
+</a>
+  <button class="btn-new">New</button>
       <button class="undo-btn">
-        <span class="emoji primary">⏳↩️</span><span class="emoji backup">↩️</span>
+        <span id= "undo-btn" class="emoji primary">⏰</span><span class="emoji backup">↩️</span>
       </button>
-      <button class="hint-btn">
+      <button id="hint-btn">
         <span class="emoji primary">💡</span><span class="emoji backup">❓</span>
       </button>
       <button class="btn-menu">
         <span class="emoji primary">☰</span><span class="emoji backup">≡</span>
       </button>
     </div>
+
 
      <div class="score-bar">
       <div class="ai-section">
@@ -333,7 +76,7 @@ cell-O {
             <span class="emoji primary">🤖</span><span class="emoji backup">💻</span><span class="emoji-name">Easy</span>
             
           </span>
-          <span onclick="setAILevel('🔰', 'Medium')">   <span class="emoji primary">🔰</span><span class="emoji backup">💡</span><span class="emoji-name">Medium</span>
+          <span onclick="setAILevel('🔰','Medium')">   <span class="emoji primary">🔰</span><span class="emoji backup">💡</span><span class="emoji-name">Medium</span>
            
             
           </span>
@@ -378,9 +121,10 @@ cell-O {
     </div>
     
 
-
+ <div class="game-wrapper">
     <div class="game-board"></div>
-
+        <div class="win-line" id="win-line"></div>
+</div>
     <div class="bottom-bar">
       <div class="turn-indicator game-result">Your Turn</div>
       <div class="action-buttons">
@@ -392,11 +136,43 @@ cell-O {
 
     <div class="ad-space"></div>
   </div>
+  <script>
+function supportsEmoji(emoji) {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  ctx.canvas.width = 16;
+  ctx.canvas.height = 16;
+  ctx.fillStyle = '#000';
+  ctx.textBaseline = 'top';
+  ctx.font = '16px Arial';
+  ctx.fillText(emoji, 0, 0);
+  const data = ctx.getImageData(0, 0, 16, 16).data;
+  // Check if any pixel is colored (not transparent)
+  return data.some(channel => channel !== 0);
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.emoji.primary').forEach(primary => {
+    const emojiChar = primary.textContent.trim();
+    const backup = primary.parentElement.querySelector('.emoji.backup');
+    if (!supportsEmoji(emojiChar)) {
+      // Primary unsupported, show backup
+      primary.style.display = 'none';
+      if (backup) backup.style.display = 'inline-block';
+    } else {
+      // Primary supported, hide backup
+      primary.style.display = 'inline-block';
+      if (backup) backup.style.display = 'none';
+    }
+  });
+});</script>
 
   <!-- External JavaScript Files -->
-  <script src="script21.js" defer></script>
-  <script src="script.js" defer>
   
+  <!-- JavaScript -->
+  <script src="script21.js"></script>
+    <script src="script.js"></script>
+
 
 </body>
-</html>
+        </html>
