@@ -12,6 +12,13 @@ const humanOptions = document.querySelector('.human-options');
 const aiEmoji = document.querySelector('.ai-emoji');
 const humanEmoji = document.querySelector('.human-emoji'); 
 
+
+document.querySelectorAll('.cell').forEach(cell => {
+  cell.style.margin = cellSpacing;
+  cell.style.width = cellSize;
+  cell.style.height = cellSize;
+});
+
 // =================== New Game Button Logic ===================
 newBtn.addEventListener('click', () => {
   winCount = 0;
@@ -213,23 +220,45 @@ let lastAIMoveIndex = null;
 let isGameOver = false;
 // =================== Game Initialization ===========================
 function createBoard(size, withClick = false) {
-  board = Array(size * size).fill(null);
+   board = Array(size * size).fill(null);
+  const gameBoard = document.querySelector('.game-board');
+
+  // Clear previous content
   gameBoard.innerHTML = '';
-  gameBoard.style.display = 'grid';
+
+  // Remove previous board size classes
+  gameBoard.classList.remove('board-3x3', 'board-5x5', 'board-7x7', 'board-default');
+
+  // Add appropriate board size class
+  if (size === 3) {
+    gameBoard.classList.add('board-3x3');
+  } else if (size === 5) {
+    gameBoard.classList.add('board-5x5');
+  } else if (size === 7) {
+    gameBoard.classList.add('board-7x7');
+  } else {
+    gameBoard.classList.add('board-default');
+  }
+
+  // Setup grid
   gameBoard.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
   gameBoard.style.gridTemplateRows = `repeat(${size}, 1fr)`;
 
+  // Create cells
   for (let i = 0; i < size * size; i++) {
     const cell = document.createElement('div');
     cell.classList.add('cell');
     cell.setAttribute('data-index', i);
+
     if (withClick) {
       cell.addEventListener('click', handleCellClick);
     }
+
     gameBoard.appendChild(cell);
   }
-}
 
+  return board;
+}
 function updateScoreboard() {
   humanScoreSpan.textContent = winCount;
   aiScoreSpan.textContent = lossCount;
@@ -241,8 +270,13 @@ function initGame() {
   currentPlayer = 'X';
   gameOver = false;
   statusMessage.textContent = 'Your Turn';
-removeWinLine();
+
+  removeWinLine();
+
+  // बोर्ड बनाएगा और सेल के साइज़/मार्जिन भी ठीक करेगा
+  board = 
   createBoard(boardSize, true);
+
   moveHistory = [];
   lastPlayerMoveIndex = null;
   lastAIMoveIndex = null;
@@ -697,6 +731,7 @@ function getBlockingMove(player) {
   if (doubleThreats.length) return doubleThreats[0];
   return null;
 }
+
 function getHelpingMove(player) {
   const available = board.map((v, i) => v === null ? i : null).filter(i => i !== null);
   for (let i of available) {
@@ -761,25 +796,38 @@ function clearHintHighlight() {
 
 
 
-function minimax(newBoard, depth, isMaximizing, depthLimit) {
+function minimax(newBoard, depth, isMaximizing, depthLimit, alpha = -Infinity, beta = Infinity) {
   if (checkWin(newBoard, 'O')) return 10 - depth;
   if (checkWin(newBoard, 'X')) return depth - 10;
   if (newBoard.every(c => c !== null) || depth >= depthLimit) return 0;
 
-  let bestScore = isMaximizing ? -Infinity : Infinity;
-
-  for (let i = 0; i < newBoard.length; i++) {
-    if (newBoard[i] === null) {
-      newBoard[i] = isMaximizing ? 'O' : 'X';
-      const score = minimax(newBoard, depth + 1, !isMaximizing, depthLimit);
-      newBoard[i] = null;
-      bestScore = isMaximizing
-        ? Math.max(score, bestScore)
-        : Math.min(score, bestScore);
+  if (isMaximizing) {
+    let bestScore = -Infinity;
+    for (let i = 0; i < newBoard.length; i++) {
+      if (newBoard[i] === null) {
+        newBoard[i] = 'O';
+        const score = minimax(newBoard, depth + 1, false, depthLimit, alpha, beta);
+        newBoard[i] = null;
+        bestScore = Math.max(score, bestScore);
+        alpha = Math.max(alpha, bestScore);
+        if (beta <= alpha) break;  // **Prune**
+      }
     }
+    return bestScore;
+  } else {
+    let bestScore = Infinity;
+    for (let i = 0; i < newBoard.length; i++) {
+      if (newBoard[i] === null) {
+        newBoard[i] = 'X';
+        const score = minimax(newBoard, depth + 1, true, depthLimit, alpha, beta);
+        newBoard[i] = null;
+        bestScore = Math.min(score, bestScore);
+        beta = Math.min(beta, bestScore);
+        if (beta <= alpha) break;  // **Prune**
+      }
+    }
+    return bestScore;
   }
-
-  return bestScore;
 }
 
 function getDepthLimit() {
@@ -796,7 +844,7 @@ function getDepthLimit() {
       case 'Easy': return 1;
       case 'Medium': return 2;
       case 'Hard': return 3;
-      case 'God': return 5;
+      case 'God': return 4;
       default: return 3;
     }
   } else if (boardSize === 7) {
@@ -890,4 +938,3 @@ tryAgainBtn.addEventListener('click', () => { vibrateDevice(); initGame(); });
 
 // Start the game
 initGame();
-    
