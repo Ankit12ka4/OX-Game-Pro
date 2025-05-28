@@ -657,7 +657,6 @@ border-radius: 1.5vw;
 .game-board {
   position: relative ;
   display: grid;
-  gap: 2vw;
   width: 60vw;
   height: 60vw;
   margin: auto;
@@ -753,7 +752,7 @@ align-items: center;
 }
 
 .cell {
-  gap: 5vw;
+
   border: 1.5v solid #ccc;
   border-radius: 1vw;
   background-color: #eee;
@@ -903,4 +902,32 @@ align-items: center;
   color: blue;
   font-weight: bold;
   font-size: 64px;
+  }
+
+/* For 3x3 board */
+.board-3x3 .cell {
+  width: 22.5vw;
+  height: 22.5vw;
+  margin: 1vw;
+}
+
+/* For 5x5 board */
+.board-5x5 .cell {
+  width: 13.5vw;
+  height: 13.5vw;
+  margin: 0.5vw;
+}
+
+/* For 7x7 board */
+.board-7x7 .cell {
+  width: 10.2vw;
+  height: 10.2vw;
+  margin: 0.2vw;
+}
+
+/* For other sizes (default) */
+.board-default .cell {
+  width: 6vw;
+  height: 6vw;
+  margin: 0.3vw;
   }
