@@ -1,0 +1,446 @@
+.body {
+  font-family: 'Arial', sans-serif,Montserrat;
+  background-color:#FF7CEF;
+  background-size: cover;
+  text-align: center;
+  perspective: 800vw;
+  margin:3vw;
+  padding:0vw;
+}
+
+.container {
+  position: relative;
+  perspective: 800vw;
+  margin-top:0.1vh;
+}
+  
+
+
+  .wrapper {
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateX(0deg) rotateY(10deg); /* Tilt for perspective */
+  perspective: 800vw;
+}
+
+.text-3d {
+  font-size: 10vw;
+  font-weight: 200;
+  font-family:'ChunkFive',Arial, sans-serif;
+  text-transform: uppercase;
+  color:#E53935;
+  -webkit-text-stroke: 0.1vw #B52424A6;
+  letter-spacing: 0.1vw;
+  user-select: none;
+  position: relative;
+    
+     
+}
+
+.text-3d::before {
+  content: 'OX Game Pro';
+  position: absolute;
+  transform: translateZ(-40vw) rotateY(-19deg);
+  color: limegreen;
+  z-index: -1;
+}
+
+.text-3d::after {
+  content: 'OX Game Pro';
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateZ(-40vw) rotateY(19deg);
+  color: #3AE535;
+  z-index: -2;
+  
+}
+  
+.text-3d-wrapper {
+  font-family: 'ChunkFive',Arial, sans-serif;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  position: relative;
+  top:-1vh;
+  margin-top:0vh;
+}
+
+p {
+  text-align: center;
+  font-family: 'Boogaloo', Arial, sans-serif;
+  font-size: 6vw;
+  color: #800080;
+  position: relative;
+  top:-3.5vh ;
+  left:1vw;
+  margin-left:4vw;
+  margin-right: 2vw
+}
+
+.main-section {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin: 0vw;
+  position: relative;
+  top: -6vh;
+}
+
+.left-section {
+  width: 65vw;
+}
+
+.board-title {
+  font-family: 'Amaranth', Arial, sans-serif;
+  display: flex;
+  flex-wrap: wrap;
+  color: #008000;
+  position: relative;
+  top: 0vh;
+  left:0vw ;
+  margin-top:4vh;
+  font-size: 8vw;
+}
+
+.board-options {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4vw;
+  position: relative;
+  top:0vh;
+  left:-1.5vw;
+  margin-left: 0vw;
+  
+}
+
+.how-to-play {
+  font-family: 'Amaranth', Arial, sans-serif;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 8vw;
+  
+  color: #E100FF;
+  position: relative;
+  top: 0vh;
+  left:0vw ;
+}
+
+.how-to {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 3vh;
+  font-size: 5vw;
+  position: relative;
+  top: 0vw;
+  left: -1.2vw;
+  border-radius: 10vw;
+  -webkit-text-stroke:0.01rem #9F10C2;
+}
+
+
+.game-level {
+  font-family: 'Amaranth', Arial, sans-serif;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 8vw;
+  
+  color: #E100FF;
+  position: relative;
+  top: 0vh;
+  left:0vw ;
+}
+
+
+
+.level1-4 {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2.3vh;
+  font-size: 5vw;
+  position: relative;
+  top: 0vw;
+  left: -1.2vw;
+  border-radius: 10vw;
+  -webkit-text-stroke:0.01rem #B418DA;
+}
+
+
+.menu-bar{
+  font-family: 'Boogaloo', Arial, sans-serif;
+  font-size: 6vw;
+  gap:2vw;
+}
+  
+
+button {
+  font-size: 100%;
+  border: none;
+  border-radius: 5vw;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  z-index: 1;
+  position: relative;
+}
+
+button:hover {
+  transform: scale(0.93);
+  box-shadow: 0 5% 10% rgba(0, 0, 0, 0.3);
+}
+
+.board-size {
+  font-family: 'Days One', Arial, sans-serif;
+  background-color:#F8F800;
+  color: #008000;
+  font-size: 8vw;
+  font-weight: bold;
+  display: block;
+  padding: 0vw;
+  border-radius: 25%;
+  position: relative;
+  top: 0vh;
+  left: 0vw;
+  width:16vw ;
+  height: 5vh ;
+  display: flex;
+  justify-content:center!important; 
+  align-items:center!important;
+  
+}
+
+
+
+.play1 {
+  font-family: 'Days One', Arial, sans-serif;
+  background-color: #008000;
+  color: #E400FF;
+  font-size:7.2vw;
+  font-weight: bold;
+  display: inline-block;
+  
+  padding:0vw;
+  box-sizing: border-box;
+  border-radius: 50vw;
+  z-index: 2;
+  position: relative;
+  top: 0vh;
+  right: 0vw;
+  width:45vw;
+  height:6vh;
+  display: flex;
+justify-content: center;  /* Horizontal center */
+align-items: center;
+}
+
+
+.play2 {
+  font-family: 'Days One', Arial, sans-serif;
+  font-size:7.2vw;
+  background-color: #008000;
+  color: #E400FF;
+  font-weight: bold;
+  display: inline-block;
+  padding: 0vw;
+  
+  z-index: 2;
+  position: relative;
+  top: 0vh;
+  right:0vw;
+  width:45vw;
+  height:6vh;
+  display: flex;
+justify-content: center;  /* Horizontal center */
+align-items: center;      /* Vertical center */
+}
+
+
+.play3 {
+  font-family: 'Days One', Arial, sans-serif;
+  background-color: #009C00;
+  color: #E400FF;
+  font-weight: bold;
+  font-size: 7.2vw;
+  display: inline-block;
+  padding:0vw ;
+  z-index: 2;
+  position: relative;
+  top:0vh;
+  right: 0vw;
+  width:45vw;
+  height:6vh;
+  display: flex;
+justify-content: center;  /* Horizontal center */
+align-items: center;      /* Vertical center */
+}
+
+
+
+
+.level1 {
+  font-family: 'Days One', Arial, sans-serif;
+  background-color: #008000;
+  color: #E400FF;
+  font-size:6vw;
+  font-weight: bold;
+  display: inline-block;
+  
+  padding:0vw;
+  box-sizing: border-box;
+  border-radius: 50vw;
+  z-index: 2;
+  position: relative;
+  top: 0vh;
+  right: 0vw;
+  width:45vw;
+  height:4.3vh;
+  display: flex;
+justify-content: center;  /* Horizontal center */
+align-items: center;
+}
+
+
+.level2 {
+  font-family: 'Days One', Arial, sans-serif;
+  font-size:5.5vw;
+  background-color: #008000;
+  color: #E400FF;
+  font-weight: bold;
+  display: inline-block;
+  padding: 0vw;
+  z-index: 2;
+  position: relative;
+  top: 0vh;
+  right:0vw;
+  width:45vw;
+  height:4.3vh;
+  display: flex;
+justify-content: center;  /* Horizontal center */
+align-items: center;      /* Vertical center */
+}
+
+
+.level3 {
+  font-family: 'Days One', Arial, sans-serif;
+  background-color: #008000;
+  color: #E400FF;
+  font-weight: bold;
+  font-size: 6vw;
+  display: inline-block;
+  padding:0vw ;
+  z-index: 2;
+  position: relative;
+  top:0vh;
+  right: 0vw;
+  width:45vw;
+  height:4.3vh;
+  display: flex;
+justify-content: center;  /* Horizontal center */
+align-items: center;      /* Vertical center */
+}
+
+
+
+.level4 {
+  font-family: 'Days One', Arial, sans-serif;
+  background-color: #008000;
+  color: #E400FF;
+  font-weight: bold;
+  font-size: 6vw;
+  display: inline-block;
+  padding:0vw ;
+  z-index: 2;
+  position: relative;
+  top:0vh;
+  right: 0vw;
+  width:45vw;
+  height:4.3vh;
+  display: flex;
+justify-content: center;  /* Horizontal center */
+align-items: center;      /* Vertical center */
+}
+
+
+.winners-section {
+  font-family: 'Amaranth', Arial, sans-serif;
+  
+  background-color: #E3E618;
+  color: #FFC0CB;
+  display: inline-block;
+margin-left:0.5vw;
+  padding: 1vw;
+  border-radius: 3.5vw;
+  border: 1.5vw solid gold;
+
+  position: relative;
+  top: 0vh;
+  width:25vw ;
+  height:55.3vh ;
+  right:0vw;
+  max-height:vh ;
+}
+.winners-section h2 {
+  font-size: 3.5vw;
+  font-weight:bold;
+  color: #FF0000;
+  text-align: center;
+  background-color: #00FF40;
+  display: inline-block;
+  border-radius: 10%;
+  text-transform: uppercase;
+  position: relative;
+  top: -2.2vh;
+  right:1vw;
+  -webkit-text-stroke: 0.1vw #FFFF03;
+  width:27vw;
+  height: 8.5vh;
+  border-radius: 2vw;
+
+  border: 1.5vw  #5A4242;
+}
+
+.winner-list {
+  font-family: Arial, sans-serif;
+  font-size: 3vw;
+  overflow-y: auto;
+  padding:0vw;
+padding-top:1vh;
+  border: 10% solid #000 ;
+  background-color: #E3F2FD;
+  border-radius:0 0 5% 5%;
+  scrollbar-width: thin;
+  color:  #1A237E;
+  position: relative;
+  right: 1vw;
+  width: 27vw;
+  font-weight:bold ;
+  height: calc(57vh - 9.5vh);
+  top:-6.3vh ;
+  
+}
+
+
+.footer {
+  margin-bottom: 0.1vh;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1vw;
+}
+footer button {
+  font-family: 'Autour One', Arial, sans-serif;
+  background-color: #FF0000;
+  color: #FFFFFF;
+  border-radius: 1vw;
+  padding: 1vw;
+  font-size: 2vw;
+  font-weight:bold ;
+}
+
+
+

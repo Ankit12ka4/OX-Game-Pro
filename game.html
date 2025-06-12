@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OX Game Pro</title>
+
+  <!-- Fonts & Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Boogaloo&family=Days+One&family=Amaranth:wght@700&family=Autour+One&display=swap" rel="stylesheet">
+  <link href="https://fonts.cdnfonts.com/css/chunkfive" rel="stylesheet">
+<!-- CSS -->
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style2.css">
+<link rel="stylesheet" href="style3.css">
+
+
+  <style>
+  .emoji.primary {
+  display: inline-block;
+}
+
+.emoji.backup {
+  display: none;
+  pointer-events: none;
+  user-select: none;
+}
+</style>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1 class="text-3d-wrapper">
+        <span class="text-3d">OX Game Pro</span>
+      </h1>
+    </header>
+<div class="menu-bar">
+  <a href="index.html"
+<button class="home-btn" aria-label="Home">
+  <span class="emoji primary" role="img" aria-label="Home Emoji">🏠</span>
+  <span class="emoji backup" aria-hidden="true">
+    <!-- SVG as fallback -->
+    <svg width="30" height="25" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <rect x="12" y="28" width="40" height="28" fill="#FFF3E0" stroke="#BDBDBD" stroke-width="1"/>
+      <polygon points="32,4 4,28 8,32 32,12 56,32 60,28" fill="#D32F2F"/>
+      <rect x="26" y="38" width="12" height="18" fill="#A1887F" stroke="#5D4037" stroke-width="1"/>
+      <circle cx="36" cy="47" r="1" fill="#000"/>
+      <rect x="40" y="34" width="10" height="10" fill="#81D4FA" stroke="#0288D1" stroke-width="1"/>
+      <line x1="45" y1="34" x2="45" y2="44" stroke="#0288D1" stroke-width="1"/>
+      <line x1="40" y1="39" x2="50" y2="39" stroke="#0288D1" stroke-width="1"/>
+      <rect x="44" y="10" width="4" height="8" fill="#B71C1C"/>
+    </svg>
+  </span>
+</button>
+</a>
+  <button class="btn-new">New</button>
+      <button class="undo-btn">
+        <span id= "undo-btn" class="emoji primary">⏰</span><span class="emoji backup">↩️</span>
+      </button>
+      <button id="hint-btn">
+        <span class="emoji primary">💡</span><span class="emoji backup">❓</span>
+      </button>
+      <button class="btn-menu">
+        <span class="emoji primary">☰</span><span class="emoji backup">≡</span>
+      </button>
+    </div>
+
+
+     <div class="score-bar">
+      <div class="ai-section">
+        <span class="ai-emoji" onclick="toggleAIOptions()"> <span class="emoji-name">AI</span>
+          <span class="emoji primary">🤖</span><span class="emoji backup">💻</span>
+          
+        </span>
+        <div class="ai-options hidden">
+          <span onclick="setAILevel('🤖','Easy')">  
+            <span class="emoji primary">🤖</span><span class="emoji backup">💻</span><span class="emoji-name">Easy</span>
+            
+          </span>
+          <span onclick="setAILevel('🔰','Medium')">   <span class="emoji primary">🔰</span><span class="emoji backup">💡</span><span class="emoji-name">Medium</span>
+           
+            
+          </span>
+          <span onclick="setAILevel('⚙️', 'Hard')"> 
+            <span class="emoji primary">⚙️</span><span class="emoji backup">⛭</span><span class="emoji-name">Hard</span>
+            
+          </span>
+          <span onclick="setAILevel('👽', 'God')"> 
+            <span class="emoji primary">👽</span><span class="emoji backup">★</span><span class="emoji-name">God ai</span>
+            
+          </span>
+        </div>
+        <span class="ai-score">0</span>
+      </div>
+
+      <div class="human-section"><span class="human-score">0</span>
+     
+        <span class="human-emoji" onclick="toggleHumanOptions()"> 
+          <span class="emoji primary">👦</span><span class="emoji backup">👤</span><span class="emoji-name">Human</span>
+          
+        </span>
+        <div class="human-options hidden">
+          <span onclick="setHumanEmoji('👦','�','Boy')">
+           <span class="emoji primary">👦</span><span class="emoji backup">🙂</span>  <span class="emoji-name">Boy</span>
+            
+          </span>
+          <span onclick="setHumanEmoji('👧','�','Girl')">
+              <span class="emoji primary">👧</span><span class="emoji backup">🙃</span><span class="emoji-name">Girl</span>
+            
+          </span>
+          <span onclick="setHumanEmoji('🧔','�','Man')">
+             <span class="emoji primary">🧔</span><span class="emoji backup">👨</span><span class="emoji-name">Man</span>
+            
+          </span>
+          <span onclick="setHumanEmoji('👩','�','Woman')">
+             <span class="emoji primary">👩</span><span class="emoji backup">👩</span><span class="emoji-name">Woman</span>
+        
+            
+          </span>
+        </div>
+         </div>
+    </div>
+    
+
+ <div class="game-wrapper">
+    <div class="game-board"></div>
+        <div class="win-line" id="win-line"></div>
+</div>
+<button onclick="submitScore('TestPlayer')">Send Score</button>
+    <div class="bottom-bar">
+      
+      
+      <div class="turn-indicator game-result">Your Turn</div>
+      <div class="action-buttons">
+        <button class="btn-play" style="display: none;" onclick="resetGameBoardOnly()">Play Again</button>
+        <button class="btn-try" style="display: none;" onclick="resetGameBoardOnly()">Try Again</button>
+      </div>
+    </div>
+
+
+    <div class="ad-space"></div>
+  </div>
+  <script>
+function supportsEmoji(emoji) {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  ctx.canvas.width = 16;
+  ctx.canvas.height = 16;
+  ctx.fillStyle = '#000';
+  ctx.textBaseline = 'top';
+  ctx.font = '16px Arial';
+  ctx.fillText(emoji, 0, 0);
+  const data = ctx.getImageData(0, 0, 16, 16).data;
+  // Check if any pixel is colored (not transparent)
+  return data.some(channel => channel !== 0);
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.emoji.primary').forEach(primary => {
+    const emojiChar = primary.textContent.trim();
+    const backup = primary.parentElement.querySelector('.emoji.backup');
+    if (!supportsEmoji(emojiChar)) {
+      // Primary unsupported, show backup
+      primary.style.display = 'none';
+      if (backup) backup.style.display = 'inline-block';
+    } else {
+      // Primary supported, hide backup
+      primary.style.display = 'inline-block';
+      if (backup) backup.style.display = 'none';
+    }
+  });
+});</script>
+
+  <!-- External JavaScript Files -->
+  
+<!-- JS -->
+<script src="script.js"></script>
+<script src="script21.js"></script>
+
+
+
+</body>
+</html>

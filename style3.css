@@ -1,0 +1,19 @@
+.selected {
+  position: relative;
+  background-color: white;
+  color: black;
+  font-weight: bold;
+  border: 2px solid #FF0000;
+  border-radius: 8px;
+  z-index: 1;
+  overflow: hidden;
+  animation: softGlowBorder 1s steps(6, jump-start) infinite;
+}
+
+@keyframes softGlowBorder {
+  0%   { border-color: #FF0000; }  /* Red */
+  20%  { border-color: #11FF00; }  /* Green */
+  40%  { border-color: #00FF2F; }  /* Mint green */
+  60%  { border-color: #0D00FF; }  /* Blue */
+  80%  { border-color: #FF00FF; }  /* Magenta */
+  100% { border-color: #FF0000; }  
